@@ -23,7 +23,6 @@ u.x = []
 u.y = []
 
 y = @(x) 10*x^2-10;
-xx = @(x) x
 
 for ind = 1:N
     u.x = [u.x; X(ind)];
@@ -57,8 +56,23 @@ for i = 1:num_steps
         else
             lR = sqrt((u.x(ind) - u.x(ind+1))^2 + (u.y(ind)-u.y(ind+1))^2);
             lL = sqrt((u.x(ind) - u.x(ind-1))^2 + (u.y(ind)-u.y(ind-1))^2);
-            FR = -(lR - l0) * k;
-            FL = -(lL - l0) * k;
+                
+            if lR < l0
+                FR = 0;
+            else
+                FR = -(lR - l0) * k;
+            end
+                        
+            if lL < l0
+                FL = 0;
+            else
+                FL = -(lL - l0) * k;
+            end
+
+
+
+%             FR = -(lR - l0) * k;
+%             FL = -(lL - l0) * k;
             
             
             frxR = ((V.x(i, ind+1)-V.x(i, ind))*(u.x(ind+1)-u.x(ind))+(V.y(i, ind+1)-V.y(i, ind))*(u.y(ind+1)-u.y(ind)))/lR * (u.x(ind+1) - u.x(ind));
@@ -79,13 +93,15 @@ for i = 1:num_steps
             
         end
             
-        u.x = u.x + V.x(i+1, :)'.*dt;
-        u.y = u.y + V.y(i+1, :)'.*dt;
         
         %absV = sum((V.x(i+1, :).*(V.y(i+1, :))).^2)
        
         
     end
+
+            
+    u.x = u.x + V.x(i+1, :)'.*dt;
+    u.y = u.y + V.y(i+1, :)'.*dt;
     
     %plot(u.x, u.y, 'rd-')
     %title(["t = ", num2str(i*dt)])

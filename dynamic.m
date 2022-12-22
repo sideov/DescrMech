@@ -23,7 +23,7 @@ V.y = zeros(2,N)
 X = linspace(a,b,N);
 
 
-t_max = 10
+t_max = 100
 num_steps = t_max/dt;
 T = 0:dt:t_max-dt
 
@@ -36,13 +36,12 @@ fig1 = figure
 ax = gca;
 
 h = animatedline(ax, u.x, u.y, "Color", "red", "Marker", "o")
-ax.XLim = [-1,1.2]
-ax.YLim = [-300, 0]
 ax.XGrid = "on"
 ax.YGrid = "on"
 ax.XLabel.String = "x"
 ax.YLabel.String = "y"
 hold(ax, "on")
+axis("equal")
 
 
 ax.Title.String = "t = "
@@ -91,15 +90,17 @@ for i = 1:num_steps
         
     end
     
-    clearpoints(h)
+  
     
     ball_y = ball_y + ball_v*dt
    
     addpoints(h, u.x, u.y)
 
     plot(ax, ball_x, ball_y, "dg")
+    
+    drawnow
 
-    drawnow limitrate
+    clearpoints(h)
     
 end
 
